@@ -1,7 +1,9 @@
+import * as github from '@actions/github'
 import fetch from "node-fetch"
 
-const domain = "https://github.com"
-const baseAssetUrl = `${domain}/assets`
+const DOMAIN = "https://github.com"
+const BUNDLE_ISSUE_NUMBER = 112
+const baseAssetUrl = `${DOMAIN}/assets`
 const manifestRoute = `${baseAssetUrl}/manifest.json`
 
 async function getManifestFileData() {
@@ -50,5 +52,27 @@ export async function trackBundleSize({files}: {files: string[]}) {
 
   await Promise.all(filePromises)
   console.log('cacheBundleSizes', cacheBundleSizes)
-  return cacheBundleSizes
+
+  createIssueComment(cacheBundleSizes)
 }
+
+async function createIssueComment(bundleSizes: Record<string, number>) {
+  // pull this from repo the action is run in
+  // const context = github.context
+
+  const octokit = github.getOctokit(process.env.GITHUB_TOKEN)
+  await octokit.rest.issues.createComment({
+    owner: 'talum',
+    repo: 'bugs',
+    issue_number: BUNDLE_ISSUE_NUMBER,
+    body: `${convertBundleSizesToMarkdown(bundleSizes)}`,
+  })
+}
+
+function convertBundleSizesToMarkdown(bundleSizes: Record<string, number>) {
+  const fileHeaders = '| File | Size |\n| --- | --- |\n'
+  const fileEntries = Object.entries(bundleSizes).map(([file, size]) => {
+    return `| ${file} | ${size/ 100000} MB |`
+  }).join('\n')
+  return `${fileHeaders}${fileEntries}`
+} 
