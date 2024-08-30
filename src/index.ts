@@ -1,5 +1,3 @@
-import { trackBundleSize } from './trackBundleSize'
+import { main } from './main'
 
-trackBundleSize({files: ['mergebox-partial.js', 'pull-request-viewer.js', 'pull-request-commits.js', 'pulls-dashboard.js']})
-
-
+main({files: ['mergebox-partial.js', 'pull-request-viewer.js', 'pull-request-commits.js', 'pulls-dashboard.js']})
