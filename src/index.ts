@@ -1,3 +1,9 @@
-import { main } from './main'
+import { main } from "./main";
 
-main({files: ['mergebox-partial.js', 'pull-request-viewer.js', 'pull-request-commits.js', 'pulls-dashboard.js']})
+import * as core from "@actions/core";
+
+const entryFileNames = core.getInput("entry_file_names").split(",");
+
+main({
+  files: entryFileNames,
+});

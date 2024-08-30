@@ -1,0 +1,21 @@
+name: 'Track bundle sizes'
+description: 'Approximates the bundle size of a project by finding the chunks from a manifest file and measuring them'
+author: 'talum'
+
+# Add your action's branding here. This will appear on the GitHub Marketplace.
+branding:
+  icon: 'heart'
+  color: 'red'
+
+# Define your inputs here.
+inputs:
+  tracking_issue_number:
+    description: 'The issue number in the repo where this action is installed. Comments will be appended to this issue. '
+    required: true
+  entry_file_names:
+    description: 'The entry file names to track. This is a comma separated list of file names. For example, "index.js,app.js"'
+    required: true
+
+runs:
+  using: node20
+  main: dist/index.js
