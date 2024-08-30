@@ -10,7 +10,7 @@ export function convertBundleSizesToMarkdown(
   const fileEntries = Object.entries(bundleSizes)
     .sort((a, b) => a[0].localeCompare(b[0]))
     .map(([file, size]) => {
-      return `| ${file} | ${size / 100000} MB |`;
+      return `| ${file} | ${size / 1000000} MB |`;
     })
     .join("\n");
   return `${INTRO_TEXT}\n${fileHeaders}${fileEntries}`;
