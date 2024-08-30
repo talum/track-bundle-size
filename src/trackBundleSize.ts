@@ -11,9 +11,8 @@ async function fetchAndMeasureChunksForFile(
   cacheBundleSizes: Record<string, number>,
 ) {
   // Bundle size is a combination of the entry file size + the size of all the chunks
-  const filePromises = entry["files"]
-    .map(async (file) => getChunkSize(file))
-    .concat(getChunkSize(entry["src"]));
+  // Note that the entry file is included in the list of files in the manifest
+  const filePromises = entry["files"].map(async (file) => getChunkSize(file));
 
   const sizes = await Promise.all(filePromises);
   const totalSize = sizes.reduce((acc, size) => acc + size, 0);
